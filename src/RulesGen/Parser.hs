@@ -19,12 +19,12 @@ addToRules rs line = Map.alter addRule nonterminal rs
           where (maxID, _) = Map.findMax r
 
 parseLine :: String -> (NonterminalID, Int, [Symbol])
-parseLine line = (NonterminalID beforePlus, count, parseBody rest)
+parseLine line = (NonterminalID beforeTimes, count, parseBody rest)
   where (beforeEquals, '=':rest) = span (/= '=') line
-        (beforePlus, countChunk) = span (/= '+') beforeEquals
+        (beforeTimes, countChunk) = span (/= '*') beforeEquals
         count = case countChunk of
             "" -> 1
-            (_:countString) -> (read countString :: Int) + 1
+            (_:countString) -> read countString :: Int
 
 parseBody :: String -> [Symbol]
 parseBody "" = []
