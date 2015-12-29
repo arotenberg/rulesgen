@@ -18,6 +18,3 @@ data Symbol
     | RandomNonterminal !NonterminalID
     | BoundNonterminal !NonterminalID
   deriving (Show)
-
-unionRules :: Rules -> Rules -> Rules
-unionRules (Rules rulesMap1) (Rules rulesMap2) = Rules (rulesMap1 `Map.union` rulesMap2)

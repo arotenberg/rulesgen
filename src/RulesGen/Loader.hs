@@ -1,21 +1,14 @@
 module RulesGen.Loader(
-    loadRulesFiles
+    loadRulesFile
 ) where
 
-import Control.Monad(forM)
-import Data.List(foldl1')
 import qualified Language.Preprocessor.Cpphs as Cpphs
 
 import RulesGen.Parser
 import RulesGen.Rules
 
-loadRulesFiles :: [FilePath] -> IO Rules
-loadRulesFiles rulesFiles = do
-    parsedFiles <- forM rulesFiles loadFile
-    return (foldl1' unionRules parsedFiles)
-
-loadFile :: FilePath -> IO Rules
-loadFile rulesFile = do
+loadRulesFile :: FilePath -> IO Rules
+loadRulesFile rulesFile = do
     rulesFileContents <- readFile rulesFile
     preprocessedContents <- Cpphs.runCpphs cpphsOptions rulesFile rulesFileContents
     return (parseRules preprocessedContents)
