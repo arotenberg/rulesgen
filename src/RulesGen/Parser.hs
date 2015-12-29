@@ -11,8 +11,9 @@ parseRules :: String -> Rules
 parseRules = Rules . foldl' addToRules Map.empty . lines
 
 addToRules :: Map.Map NonterminalID Rule -> String -> Map.Map NonterminalID Rule
-addToRules rs [] = rs
-addToRules rs line = Map.alter addRule nonterminal rs
+addToRules rs line
+    | all (`elem` " \t") line = rs
+    | otherwise = Map.alter addRule nonterminal rs
   where (nonterminal, count, body) = parseLine line
         addRule Nothing = Just $ Rule $ Map.singleton (ProductionID 0) (count, body)
         addRule (Just (Rule r)) = Just $ Rule $ Map.insert (succ maxID) (count, body) r
