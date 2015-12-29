@@ -17,11 +17,13 @@ executable rulesgen
   hs-source-dirs:      src
   main-is:             Main.hs
   other-modules:       RulesGen.Gen
+                     , RulesGen.Loader
                      , RulesGen.Parser
                      , RulesGen.Rules
   ghc-options:         -W -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base >= 4.8 && < 5
                      , containers == 0.5.*
+                     , cpphs == 1.19.*
                      , MonadRandom == 0.4.*
                      , optparse-applicative == 0.12.*
                      , random == 1.1.*

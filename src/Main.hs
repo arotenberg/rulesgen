@@ -1,14 +1,15 @@
-module Main where
+module Main(
+    main,
+    mainWithArgs
+) where
 
 import Control.Applicative(some)
-import Control.Monad(forM)
-import Data.List(foldl1')
 import qualified Options.Applicative as Opt
 import System.Environment(getArgs)
 
-import RulesGen.Rules
-import RulesGen.Parser
 import RulesGen.Gen
+import RulesGen.Loader
+import RulesGen.Rules
 
 main :: IO ()
 main = getArgs >>= mainWithArgs
@@ -17,10 +18,7 @@ mainWithArgs :: [String] -> IO ()
 mainWithArgs args = do
     let parsedOptions = Opt.execParserPure Opt.defaultPrefs mainInfo args
     rulesFiles <- Opt.handleParseResult parsedOptions
-    parsedFiles <- forM rulesFiles $ \rulesFile -> do
-        fileString <- readFile rulesFile
-        return (parseRules fileString)
-    let rules = foldl1' unionRules parsedFiles
+    rules <- loadRulesFiles rulesFiles
     resultString <- runRulesGen rules (genFromNonterminal startNT)
     putStrLn resultString
 
